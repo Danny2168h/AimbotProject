@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
-public class Loop extends Canvas implements Runnable{
+public class RobotScreenShot extends Canvas implements Runnable{
 
     private static final int WIDTH = 2048;
     private static final int HEIGHT = 1152;
@@ -17,24 +17,24 @@ public class Loop extends Canvas implements Runnable{
     private Robot robot = new Robot();
 
     private BufferedImage screenShot;
+    private int r;
+    private int g;
+    private int b;
+    private int a;
 
-    public Loop() throws AWTException {
+
+    public RobotScreenShot(int i, int i1, int i2, int i3) throws AWTException {
+        r = i;
+        g = i1;
+        b = i2;
+        a = i3;
+
     }
 
     public synchronized void start() {
         thread = new Thread(this);
         running = true;
         thread.start();
-    }
-
-    public synchronized void stop() {
-        try {
-            thread.join();
-            running = false;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
@@ -102,7 +102,8 @@ public class Loop extends Canvas implements Runnable{
 
     private void update() throws AWTException {
 
-        screenShot= robot.createScreenCapture(new Rectangle(0, 0, WIDTH, HEIGHT));
+        screenShot = robot.createScreenCapture(new Rectangle(0, 0, WIDTH, HEIGHT));
+        new ColourFinder(screenShot, r, g, b, a);
         updateNum++;
     }
 }

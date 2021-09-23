@@ -1,17 +1,15 @@
 package screenCapture;
 
-import screenCapture.Loop;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class mainFrame extends JFrame{
+public class AimBot extends JFrame{
 
     private static final int WIDTH = 2048;
     private static final int HEIGHT = 1152;
     private static final String TITLE = "Screen Record";
 
-    public mainFrame() throws AWTException {
+    public AimBot(int r, int g, int b, int a) throws AWTException {
         this.setTitle(TITLE);
 
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -23,7 +21,8 @@ public class mainFrame extends JFrame{
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setResizable(true);
 
-        Loop loop = new Loop();
+
+        RobotScreenShot loop = new RobotScreenShot(r, g, b, a);
         this.add(loop);
         loop.start();
         this.setVisible(true);
