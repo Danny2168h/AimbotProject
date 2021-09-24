@@ -1,4 +1,5 @@
 import screenCapture.AimBot;
+import screenCapture.ColourFinder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +13,9 @@ public class main {
 
     //call screenCapture.mainFrame for updating screenshots
     //call oneImage(); for just a screenshot
-    public static void main(String[] args) throws AWTException {
-        new AimBot(255, 0, 0, 255); // when pop-up appears make sure to move it to second monitor or something
+    //pressing Q shuts down program
+    public static void main(String[] args) throws AWTException, InterruptedException {
+        new AimBot(255, 87, 34, 255); // when pop-up appears make sure to move it to second monitor or something
         //oneImage();
         //System.out.println(rgbConverter(255, 0,0, 255));
     }
@@ -30,6 +32,7 @@ public class main {
         robot = new Robot();
 
         BufferedImage image = robot.createScreenCapture(new Rectangle(0, 0, WIDTH, HEIGHT));
+        new ColourFinder(image, 0, 117, 255, 255);
 
         frame = new JFrame();
 

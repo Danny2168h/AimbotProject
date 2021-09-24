@@ -1,6 +1,7 @@
 package screenCapture;
 
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
@@ -21,6 +22,8 @@ public class RobotScreenShot extends Canvas implements Runnable{
     private int g;
     private int b;
     private int a;
+    private boolean first = true;
+    private boolean mousePressed = false;
 
 
     public RobotScreenShot(int i, int i1, int i2, int i3) throws AWTException {
@@ -28,7 +31,6 @@ public class RobotScreenShot extends Canvas implements Runnable{
         g = i1;
         b = i2;
         a = i3;
-
     }
 
     public synchronized void start() {
@@ -37,41 +39,41 @@ public class RobotScreenShot extends Canvas implements Runnable{
         thread.start();
     }
 
+    private void update() throws InterruptedException {
+
+        if (first) {
+            Thread.sleep(4000);
+            first = false;
+        }
+
+        screenShot = robot.createScreenCapture(new Rectangle(0, 0, WIDTH, HEIGHT));
+        ColourFinder cf = new ColourFinder(screenShot, r, g, b, a);
+        if (cf.isFoundPixel()) {
+            robot.mouseMove(cf.getX(), cf.getY());
+            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+            //mousePressed = true;
+        } else if (mousePressed){
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+            mousePressed = false;
+        }
+        updateNum++;
+    }
+
     @Override
     public void run() {
-        this.requestFocus();
-        long now;
-        long updateTime;
-        long wait;
+        //this.requestFocus();
         int frames = 0;
         long timer = System.currentTimeMillis();
 
-        final int TARGET_FPS = 60;
-        final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
-
         while (running) {
-            now = System.nanoTime();
-
             try {
                 update();
-            } catch (AWTException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             render();
-
             frames++;
-
-            updateTime = System.nanoTime() - now;
-            wait = (OPTIMAL_TIME - updateTime) / 1000000;
-
-            if (wait > 0) {
-
-                try {
-                    thread.sleep(wait);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
@@ -79,7 +81,6 @@ public class RobotScreenShot extends Canvas implements Runnable{
                 frames = 0;
                 updateNum = 0;
             }
-
         }
     }
 
@@ -100,10 +101,4 @@ public class RobotScreenShot extends Canvas implements Runnable{
         buffer.show();
     }
 
-    private void update() throws AWTException {
-
-        screenShot = robot.createScreenCapture(new Rectangle(0, 0, WIDTH, HEIGHT));
-        new ColourFinder(screenShot, r, g, b, a);
-        updateNum++;
-    }
 }
