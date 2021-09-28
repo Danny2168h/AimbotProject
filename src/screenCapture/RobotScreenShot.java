@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 public class RobotScreenShot extends Canvas implements Runnable{
 
@@ -21,16 +22,14 @@ public class RobotScreenShot extends Canvas implements Runnable{
     private int r;
     private int g;
     private int b;
-    private int a;
     private boolean first = true;
     private boolean mousePressed = false;
 
 
-    public RobotScreenShot(int i, int i1, int i2, int i3) throws AWTException {
+    public RobotScreenShot(int i, int i1, int i2) throws AWTException {
         r = i;
         g = i1;
         b = i2;
-        a = i3;
     }
 
     public synchronized void start() {
@@ -42,21 +41,29 @@ public class RobotScreenShot extends Canvas implements Runnable{
     private void update() throws InterruptedException {
 
         if (first) {
-            Thread.sleep(4000);
+            Thread.sleep(3500);
             first = false;
         }
 
         screenShot = robot.createScreenCapture(new Rectangle(0, 0, WIDTH, HEIGHT));
-        ColourFinder cf = new ColourFinder(screenShot, r, g, b, a);
-        if (cf.isFoundPixel()) {
-            robot.mouseMove(cf.getX(), cf.getY());
+        ColourFinder cf = new ColourFinder(screenShot, r, g, b);
+        LinkedList<int[]> targetList = cf.getListOfTargets();
+
+        for (int[] coords : targetList) {
+            robot.mouseMove(coords[0], coords[1]);
             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-            //mousePressed = true;
-        } else if (mousePressed){
-            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-            mousePressed = false;
         }
+
+//        if (cf.isFoundPixel()) {
+//            //robot.mouseMove(cf.getX(), cf.getY());
+//            //robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+//            //robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+//            mousePressed = true;
+//        } else if (mousePressed){
+//            //robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+//            mousePressed = false;
+//        }
         updateNum++;
     }
 

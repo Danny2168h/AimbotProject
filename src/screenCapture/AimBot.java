@@ -9,7 +9,7 @@ public class AimBot extends JFrame{
     private static final int HEIGHT = 1152;
     private static final String TITLE = "Screen Record";
 
-    public AimBot(int r, int g, int b, int a) throws AWTException {
+    public AimBot(int r, int g, int b) throws AWTException {
         this.setTitle(TITLE);
 
         this.setPreferredSize(new Dimension(1000, 750));
@@ -25,7 +25,7 @@ public class AimBot extends JFrame{
         this.addMouseListener(new MouseHandler());
         this.setEnabled(true);
 
-        RobotScreenShot loop = new RobotScreenShot(r, g, b, a);
+        RobotScreenShot loop = new RobotScreenShot(r, g, b);
         this.add(loop);
         loop.start();
         this.setVisible(true);

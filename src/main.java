@@ -15,7 +15,7 @@ public class main {
     //call oneImage(); for just a screenshot
     //pressing Q shuts down program
     public static void main(String[] args) throws AWTException, InterruptedException {
-        new AimBot(255, 87, 34, 255); // when pop-up appears make sure to move it to second monitor or something
+        new AimBot(88, 177, 255); // when pop-up appears make sure to move it to second monitor or something
         //oneImage();
         //System.out.println(rgbConverter(255, 0,0, 255));
     }
@@ -32,7 +32,7 @@ public class main {
         robot = new Robot();
 
         BufferedImage image = robot.createScreenCapture(new Rectangle(0, 0, WIDTH, HEIGHT));
-        new ColourFinder(image, 0, 117, 255, 255);
+        new ColourFinder(image, 0, 117, 255);
 
         frame = new JFrame();
 
